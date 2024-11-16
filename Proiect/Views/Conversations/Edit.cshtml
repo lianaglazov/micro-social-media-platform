@@ -1,0 +1,19 @@
+﻿@model Proiect.Models.Conversation
+
+<form method="post" asp-controller="Conversations" asp-action="Edit">
+    <label for="selectedUsers"> Adauga participanti la conversatie:</label>
+    <br />
+    @foreach (var user in ViewBag.UsersNotIn)
+    {
+        @if (user.Id != ViewBag.UserCurent)
+        {
+            <li>
+                <input type="checkbox" name="selectedUsers" value="@user.Id" id="@user.Id" />
+                <label for="@user.Id">@user.UserName</label>
+            </li>
+        }
+    }
+
+    <br />
+    <button class="button-17" type="submit">Adauga la conversatie</button>
+</form>

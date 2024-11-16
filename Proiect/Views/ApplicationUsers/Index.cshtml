@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<br />
+
+<h2>Utilizatori</h2>
+
+
+<form method="GET">
+    <div class="input-group mb-3 custom-search-bar" style="max-width: 400px;">
+        <input type="text" class="form-control" placeholder="Search a profile" name="search" value="@ViewBag.SearchString">
+        <div class="input-group-append">
+            <button class="btn btn-info" type="submit">Search</button>
+        </div>
+    </div>
+
+</form>
+
+@foreach (Proiect.Models.ApplicationUser user in ViewBag.Users)
+{
+    if (user.Id != ViewBag.UserCurent)
+    {
+        <div class="card" style="max-width: 700px;">
+
+            <div class="card-body">
+
+                <div><i class="bi bi-person"></i> @user.UserName</div>
+
+                <div class="card-text">@user.Description</div>
+
+            </div>
+
+
+            <a class="btn btn-outline-primary" href="/ApplicationUsers/Show/@user.Id">Afisare profil</a>
+
+        </div>
+
+        <br />
+        <br />
+    }
+
+}
+
+@* Afisarea paginata a articolelor *@
+<div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link"
+                   href="@ViewBag.PaginationBaseUrl=1" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            @for (int i = 1; i <= ViewBag.lastPage; i++)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       href="@ViewBag.PaginationBaseUrl=@i">@(i)</a>
+                </li>
+            }
+            <li class="page-item">
+                <a class="page-link"
+                   href="@ViewBag.PaginationBaseUrl=@(ViewBag.lastPage)" aria-
+                   label="Next">
+
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>

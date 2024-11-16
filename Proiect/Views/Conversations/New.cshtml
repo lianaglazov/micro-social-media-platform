@@ -1,0 +1,30 @@
+﻿@model Proiect.Models.Conversation
+@if (TempData["message"] != null)
+{
+    <div class="alert @ViewBag.Alert p-3 rounded-3 text-center mb-5">
+        @ViewBag.Message
+    </div>
+}
+<h2>Adauga o conversatie</h2>
+<br />
+
+@using (Html.BeginForm(actionName: "New", controllerName: "Conversations", method: FormMethod.Post))
+{
+    <label for="selectedUsers"> Adauga participanti la conversatie:</label>
+    <br />
+        @foreach (var user in ViewBag.AllUsers)
+        {
+        @if (user.Id != ViewBag.UserCurent)
+            {
+                <li>
+                    <input type="checkbox" name="selectedUsers" value="@user.Id" id="@user.Id" />
+                    <label for="@user.Id">@user.UserName</label>
+                </li>
+            }
+        }
+    
+    <br />
+    <button class="button-17" type="submit">Creeaza conversatie</button>
+}
+
+

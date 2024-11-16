@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<br />
+
+<h2 class="text-center">Pagina Principală</h2>
+
+<a class="nav-link text-dark d-flex align-items-center" asp-area="" asp-controller="ApplicationUsers" asp-action="Index">
+    <i class="bi bi-arrow-bar-right mr-2"></i>
+    <span class="font-size-lg">Utilizatori</span>
+</a>
+
+<br />
+
+@if (ViewBag.Message != null)
+{
+    <div class="@ViewBag.Alert p-3 rounded-3 text-center mb-5">@ViewBag.Message
+    </div>
+}
+
+
+
+@foreach (Proiect.Models.Post post in ViewBag.Posts)
+{
+    @if (post.User.Privacy == 0 || ViewBag.EsteAdmin || ViewBag.Friends.Contains(post.UserId) || post.User.Id == ViewBag.UserCurent)
+    {
+        <div class="card">
+            <a class="postlink" href="/ApplicationUsers/Show/@post.User.Id">
+                <div class="card-header"><i class="bi bi-person"></i>@post.User.UserName</div>
+            </a>
+            <div class="card-body">
+                <a class="postlink" href="/Posts/Show/@post.Id">
+                    <div class="card-text">@Html.Raw(@post.Content)</div>
+                </a>
+                <div class="d-flex justify-content-between flex-row mt-5">
+                    <span class="text-muted">@post.Date.ToString("dd MMM yy")</span>
+                    @if (ViewBag.EsteAdmin || ViewBag.EsteUser)
+                    {
+                        <span class="text-muted" style="margin:2px">
+
+                            <i class="fa fa-heart" id="@post.Id" onclick="likePost(@post.Id, this)"></i>
+                            @post.Likes
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <br />
+    } 
+}

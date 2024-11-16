@@ -1,0 +1,135 @@
+﻿@model Proiect.Models.ApplicationUser
+@{
+    ViewBag.Title = "Show";
+}
+
+<h2>Profile</h2>
+
+<div class="card">
+
+    <div class="card-body">
+        @if (Model.ProfileImage != null)
+        {
+            <div class="profile-image-container">@Html.Raw(Model.ProfileImage)</div>
+            @if (Model.Id == ViewBag.UserCurent || ViewBag.EsteAdmin)
+            {
+                <form method="post" action="/ApplicationUsers/DeleteProfilePic/@Model.Id">
+
+                    <button class="btn btn-danger" style="font-size:8px; margin-left:30px;" type="submit">Sterge poza de profil</button>
+
+                </form>
+            }
+
+        }
+        else
+        {
+            <i class="bi bi-person-circle" style="font-size:50px; margin-left:45px;"></i>
+        }
+
+        <h3 class="username"><i class="bi bi-at"></i>@Model.UserName.Split('@')[0]</h3>
+
+        <br />
+        <br />
+
+        @if (Model.Description != null)
+        {
+            <div class="mb-5">
+                <h3 class="lead fw-normal mb-1" style="font-weight: bold;">About</h3>
+                <div class="p-4" style="background-color: #f8f9fa;">
+                    <div class="card-text">@Model.Description</div>
+                </div>
+            </div>
+
+        }
+
+    </div>
+    <br />
+    <!-- Verificare profil privat -->
+    @*
+    @if (
+    Model.Privacy == null || Model.Privacy == 0)
+
+
+    {
+    *@
+
+    @if (Model.Id == ViewBag.UserCurent || ViewBag.EsteAdmin ||
+    Model.Privacy == null || Model.Privacy == 0 || ViewBag.Urmareste == 1)
+    {
+
+
+        <!-- Afisare postari  -->
+        @foreach (var post in Model.Posts)
+        {
+            if (@post.UserId == @Model.Id)
+            {
+                <div class="card">
+
+                    <div class="card-header"><i class="bi bi-person"></i>@post.User.UserName</div>
+                    <a class="postlink" href="/Posts/Show/@post.Id">
+                        <div class="card-body">
+                            <div class="card-text">@Html.Raw(@post.Content)</div>
+                            <div class="d-flex justify-content-between flex-row mt-5">
+                                <span class="text-muted">@post.Date.ToString("dd MMM yy")</span>
+                                @if (ViewBag.EsteAdmin || ViewBag.EsteUser)
+                                {
+                                <span class="text-muted" style="margin:2px">
+                                    <i class="fa fa-heart" id="@post.Id" onclick="likePost(@post.Id, this)"></i>
+                                        @post.Likes
+                                </span>
+                                }
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+
+                <br />
+            }
+        }
+
+
+    }
+
+    else
+    {
+
+        <div class="card" style="display: flex; justify-content: center; align-items: center;">
+
+            <div class="p-4" style="background-color: #f8f9fa;">
+
+                <div class="card-text">Profil privat</div>
+                <div>
+                    <i class="bi bi-lock" style="size:15px; margin-left:40px;"></i>
+                </div>
+                @if (ViewBag.EsteUser)
+                {
+                    <form method="post" action="/ApplicationUsers/SendRequest/@Model.Id">
+
+                    <button type="submit">Trimite cerere</button>
+
+                </form>
+                }
+
+
+            </div>
+        </div>
+
+    }
+    @if (Model.Id == ViewBag.UserCurent || ViewBag.EsteAdmin)
+    {
+        <div class="d-flex flex-row justify-content-between p-3 border-1 border-top">
+
+            <a class="btn btn-outline-primary" href="/ApplicationUsers/Edit/@Model.Id">Editeaza profil</a>
+
+            @* <form method="post" action="/ApplicationUsers/Delete/@Model.Id">
+
+        <button class="btn btn-danger" type="submit">Sterge profil</button>
+
+        </form>
+        *@
+
+        </div>
+    }
+
+</div>

@@ -1,0 +1,54 @@
+﻿
+<h2 class="text-center">Conversațiile mele</h2>
+
+@if (TempData["message"] != null)
+{
+    <div class="alert @ViewBag.Alert p-3 rounded-3 text-center mb-5">
+        @ViewBag.Message
+    </div>
+}
+
+<br />
+
+<div>
+    <a class="button-17" style="text-decoration:none" href="/Conversations/New">
+        <i class="bi bi-plus"></i> &nbsp; Conversatie noua
+    </a>
+</div>
+
+<br />
+
+@foreach (var conversation in ViewBag.Conversations)
+{
+     <div class="container">
+        <div class="row">
+            <div class="card">
+                <a class="postlink" href="/Conversations/Show/@conversation.Id">
+                <div class="card-body">
+                    @if (conversation.AppUserConversations.Count > 0) 
+                   {
+                        <p> Conversatie cu: </p>
+                        
+                  
+                        @foreach (var userConversation in conversation.AppUserConversations)
+                            {
+                                @if (userConversation.UserId != ViewBag.UserCurent || ViewBag.EsteAdmin) 
+                                {
+                                    @if (userConversation.ApplicationUser != null)
+                                    {
+                                        <p>@(userConversation.ApplicationUser.UserName)</p>
+                                    }
+                                }
+                            }
+                  
+                        <br />
+                   }
+                </div>
+                </a>
+            </div>
+        </div>
+      </div>
+      <br />
+}
+
+

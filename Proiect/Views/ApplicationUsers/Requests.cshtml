@@ -1,0 +1,57 @@
+﻿@{
+    ViewBag.Title = "Request";
+}
+
+<br />
+
+<h2>Utilizatori</h2>
+
+@if (ViewBag.message != null)
+{
+    <h2 class="Alert-succes text-center rounded-3 mb-5">@ViewBag.message</h2>
+}
+<br />
+
+
+@if ( ViewBag.Requests == null)
+{
+    <p>Nu ai nicio cerere momentan</p>
+}
+
+else
+{
+    
+
+    @foreach (var user in ViewBag.RequestedUsers)
+    {
+       
+    
+            <div class="card" style="max-width: 700px;">
+                <div class="card-body">
+                    <div><i class="bi bi-person"></i> @user.UserName</div>
+                    <div class="card-text">@user.Description</div>
+                <div class="d-flex flex-row justify-content-between">
+                    <form method="post" action="/Friends/New?UserUrmaritId=@ViewBag.UserCurent&amp;UserUrmaritorId=@user.Id">
+
+                        <button class="button-17" style="margin:10px" type="submit">Accepta</button>
+
+                    </form>
+                    <form method="post" action="/ApplicationUsers/DeleteRequest?UserUrmaritId=@ViewBag.UserCurent&amp;UserUrmaritorId=@user.Id">
+
+                        <button class="button-17" style="margin:10px" type="submit">Sterge</button>
+
+                    </form>
+                </div>
+                </div>
+
+                @*
+                <a class="btn btn-outline-primary" href="/ApplicationUsers/Show/@user.Id">Afisare profil</a>
+                *@
+            </div>
+
+            <br />
+            <br />
+    
+
+    }
+}

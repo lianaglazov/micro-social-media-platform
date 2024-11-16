@@ -1,0 +1,23 @@
+﻿
+<h2 class="text-center">Prietenii mei</h2>
+
+@if (ViewBag.Message != null)
+{
+    <div class="@ViewBag.Alert p-3 rounded-3 text-center mb-5">@ViewBag.Message</div>
+}
+
+@foreach(var friend in ViewBag.Friends)
+{
+    <div class="card d-flex flex-row justify-content-between" align="center">
+        <p>@friend.UserName</p>
+        <form method="post" action="/Friends/Delete?UserUrmaritId=@ViewBag.UserCurent&amp;UserUrmaritorId=@friend.Id">
+
+            <button class="button-17" style="margin:10px" type="submit">Sterge</button>
+
+        </form>
+    </div>
+}
+
+
+
+

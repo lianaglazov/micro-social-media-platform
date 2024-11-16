@@ -1,0 +1,149 @@
+﻿@model Proiect.Models.Post
+
+<br />
+
+<div class="card">
+        <a class="postlink" href="/ApplicationUsers/Show/@Model.User.Id">
+        <div class="card-header"><i class="bi bi-person"></i>@Model.User.UserName</div>
+        </a>
+        <div class="card-body">
+             <div class="card-text"> @Html.Raw(Model.Content) </div>
+             <div class="d-flex justify-content-between flex-row mt-5">
+                 <span class="text-muted">@Model.Date.ToString("dd MMM yy HH:mm")</span>
+            @if (ViewBag.EsteAdmin || ViewBag.EsteUser)
+            {
+                <span class="text-muted" style="margin:2px">
+                    <i class="fa fa-heart" id="@Model.Id" onclick="likePost(@Model.Id, this)"></i>
+                @Model.Likes
+                </span>
+            }
+             </div>
+        </div>
+
+    @if (Model.UserId == ViewBag.UserCurent)
+    {
+        <div class="d-flex flex-row justify-content-between">
+            <form method="post" action="/Posts/Delete/@Model.Id">
+
+                <button class="button-17" style="margin:10px" type="submit">Sterge postarea</button>
+
+            </form>
+
+            <a class="button-17" style="margin:10px; text-decoration:none" href="/Posts/Edit/@Model.Id">Editeaza postarea</a>
+
+        </div>
+    }
+    else 
+        if(ViewBag.EsteAdmin)
+        {
+        <form method="post" action="/Posts/Delete/@Model.Id">
+
+            <button class="button-17" style="margin:10px" type="submit">Sterge postarea</button>
+
+        </form>
+
+        }
+</div>
+
+<br />
+<br />
+
+@foreach (var comm in Model.Comments)
+{
+    <hr />
+    <div class="container">
+        <div class="row" >
+
+                <div>
+
+                    <p>@Html.Raw(@comm.Text)</p>
+                    <small>@comm.Date.ToString("dd MMM yy HH:mm")</small>
+                <a class="postlink" href="/ApplicationUsers/Show/@comm.User.Id">
+                    <strong><i class="bi bi-person"></i> @comm.User.UserName</strong>
+                </a>
+
+                </div>
+                <br>
+
+                @if (comm.UserId == ViewBag.UserCurent)
+                {
+                    <div class="d-flex flex-row justify-content-start">
+
+                        <div>
+
+                            <a class="postlink" style="margin-right:15px" href="/Comments/Edit/@comm.Id"><i class="bi bi-pencil-square"></i>Editeaza</a>
+
+                        </div>
+
+                        <div>
+
+                            <form method="post" action="/Comments/Delete/@comm.Id">
+
+                            <button style="border: none; background: none; padding:0;" type="submit">
+                                <i class="bi bi-trash"></i>Sterge
+                            </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                }
+                else if(ViewBag.EsteAdmin)
+                {
+                    <div>
+
+                        <form method="post" action="/Comments/Delete/@comm.Id">
+
+                            <button class="button-17" type="submit"><i class="bi bi-trash"></i>Sterge</button>
+
+                        </form>
+
+                    </div>
+                }
+                <br />
+
+            </div>
+
+            
+            <br />
+
+        </div>
+}
+
+
+@if (ViewBag.EsteAdmin || ViewBag.EsteUser)
+{
+    <div class="container">
+
+        <div class="row">
+
+            <div class="card">
+
+                <form method="post" action="/Posts/Show/@Model.Id">
+
+                    <div class="card-body">
+
+                        <input type="hidden" name="PostId" value="@Model.Id" />
+
+                        <label>Continut comentariu</label>
+                        <br />
+
+                        <textarea class="summernote" name="Text"></textarea>
+
+                        @Html.ValidationMessage("Text", null, new { @class = "text-danger" })
+
+                        <br /><br />
+
+                        <button class="button-17" type="submit">Adauga comentariul</button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+}

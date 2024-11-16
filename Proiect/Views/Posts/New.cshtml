@@ -1,0 +1,35 @@
+﻿@model Proiect.Models.Post
+
+
+<h2 class="text-center mt-5">Adaugă o postare</h2>
+
+<br />
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-6 offset-3">
+
+            @using (Html.BeginForm(actionName: "New", controllerName: "Posts",
+            method: FormMethod.Post))
+            {
+
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+                <br />
+
+                @Html.Label("Content", "Continut Postare")
+                <br />
+                @Html.TextArea("Content", null, new { @class = "summernote" })
+
+                @Html.ValidationMessage("Content", null, new { @class = "text-danger" })
+                <br />
+
+                <br />
+
+                <button class="button-17" type="submit">Postează</button>
+
+            }
+
+        </div>
+    </div>
+</div>

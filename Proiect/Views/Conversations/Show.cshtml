@@ -1,0 +1,160 @@
+﻿@model Proiect.Models.Conversation
+
+<div>
+    <a class="button-17" style="text-decoration:none" href="/Conversations/Index">
+        <i class="bi bi-arrow-left"></i> &nbsp; Conversatiile mele
+    </a>
+</div>
+<br />
+
+<div class="card">
+    <div class="card-header d-flex flex-row justify-content-between align-items-center">
+        <div>
+            @foreach (var userConversation in @Model.AppUserConversations)
+            {
+                @if (userConversation.UserId != ViewBag.UserCurent)
+                {
+                    @if (userConversation.ApplicationUser != null)
+                    {
+                    <i class="bi bi-person"></i>
+
+                    @(userConversation.ApplicationUser.UserName)
+                }
+                }
+            }
+            <i class="bi bi-dot"></i>
+            <a class="postlink" href="/Conversations/Edit/@Model.Id"><i class="bi bi-plus"></i></a>
+        </div>
+        <div >
+            @if (ViewBag.AdminInConv || !ViewBag.EsteAdmin)
+            {
+                <form method="post" action="/Conversations/Leave?convId=@Model.Id&amp;userId=@ViewBag.UserCurent">
+
+                    <button class="button-17" style="margin-left:10px;" type="submit">
+                     Paraseste conversatia
+                    </button>
+
+                </form>
+            }
+        </div>
+        
+    </div>
+
+    <div class="card-body" style="overflow: auto;">
+    @foreach (var msg in Model.Messages)
+    {
+            <div class="container">
+                <div class="row">
+                    @if (msg.UserId == ViewBag.UserCurent)
+                    {
+                        <div align ="right">
+                    <div align="right" style="width:75%;padding-left:15px;margin-right:10px">
+                        <p>@Html.Raw(@msg.Content)</p>
+                            <small>@msg.MessageTime.ToString("dd MMM yy HH:mm")</small>
+                    
+                        </div>
+                        </div>
+                        <div class="d-flex flex-row justify-content-end">
+
+                            <div>
+
+                                <a class="postlink" href="/Messages/Edit/@msg.Id"><i class="bi bi-pencil"></i></a>
+
+                            </div>
+                            <i class="bi bi-dot"></i>
+                            <div>
+
+                                <form method="post" action="/Messages/Delete/@msg.Id">
+
+                                    <button style="border: none; background: none; padding:0; margin-right:10px;" type="submit">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+                    }
+                    else if(ViewBag.EsteAdmin)
+                    {
+                    <div style=" margin-left:10px">
+                        <a class="postlink" href="/ApplicationUsers/Show/@msg.User.Id">
+                            <strong><i class="bi bi-person"></i> @msg.User.UserName</strong>
+                        </a>
+                        <p>@Html.Raw(@msg.Content)</p>
+                        <small>@msg.MessageTime.ToString("dd MMM yy HH:mm")</small>
+
+                    </div>
+                        <div>
+
+                            <form method="post" action="/Messages/Delete/@msg.Id">
+
+                                <button style="border: none; background: none; padding:0; margin-left:10px;" type="submit">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+
+                            </form>
+
+                    </div>
+                    }
+                    else
+                    {
+                        <div style="width:75%; margin-left:10px">
+                            <a class="postlink" href="/ApplicationUsers/Show/@msg.User.Id">
+                                <strong><i class="bi bi-person"></i> @msg.User.UserName</strong>
+                            </a>
+                            <p>@Html.Raw(@msg.Content)</p>
+                            <small>@msg.MessageTime.ToString("dd MMM yy HH:mm")</small>
+
+                        </div>
+                    }
+                <br />
+
+            </div>
+
+
+            <br />
+
+        </div>
+    }
+   </div>
+   @if(ViewBag.AdminInConv || !ViewBag.EsteAdmin)
+   {
+    <div class="card-footer">
+        <div class="container">
+
+            <div class="row">
+
+                <div class="card">
+
+                    <form method="post" action="/Conversations/Show/@Model.Id">
+
+                        <div class="card-body">
+
+                            <input type="hidden" name="ConversationId" value="@Model.Id" />
+
+                            <label>Scrie un mesaj:</label>
+                            <br />
+
+                            <textarea class="summernote" name="Content" style="min-height: 50px;max-height: 200px;"></textarea>
+
+                            @Html.ValidationMessage("Content", null, new { @class = "text-danger" })
+
+                            <br />
+                            <div align="right">
+                                <button class="button-17" type="submit"> Trimite &nbsp;<i class="bi bi-arrow-right-circle"></i></button>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    }
+</div>
